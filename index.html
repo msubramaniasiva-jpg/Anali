@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Anali Technergies</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#080c14">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        :root {
+            --bg-base: #080c14;
+            --bg-card: #0f172a;
+            --bg-card-sub: #1e293b;
+            --primary-cyan: #38b6ff;
+            --sun-gold: #f59e0b;
+            --accent-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-line: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 85px;
+        }
+
+        header {
+            background: linear-gradient(180deg, #0f172a 0%, #080c14 100%);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-line);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-logo {
+            height: 44px;
+            width: auto;
+        }
+
+        .uav-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-size: 11px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .uav-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        .content-section {
+            display: none;
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .weather-banner {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border-line);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .weather-stat-lbl {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .weather-stat-val {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--sun-gold);
+            margin-top: 2px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-line);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .kpi-lbl {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .kpi-val {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-cyan);
+            margin: 6px 0 2px 0;
+        }
+
+        .kpi-sub {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .progress-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-line);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .progress-num {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary-cyan);
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .btn-action {
+            background: var(--bg-card);
+            border: 1px solid var(--border-line);
+            border-radius: 12px;
+            padding: 14px 8px;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-action:active {
+            transform: scale(0.96);
+            background: var(--bg-card-sub);
+        }
+
+        .item-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-line);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .item-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .item-badge {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .badge-cyan { background: rgba(56, 182, 255, 0.15); color: var(--primary-cyan); }
+        .badge-green { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
+        .badge-gold { background: rgba(245, 158, 11, 0.15); color: var(--sun-gold); }
+
+        .item-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .task-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-line);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .task-chk {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-cyan);
+            cursor: pointer;
+        }
+
+        .task-done .task-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .btn-call {
+            background: #1e293b;
+            color: #38b6ff;
+            border: 1px solid #38b6ff;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+        }
+
+        .btn-wa {
+            background: #10b981;
+            color: #ffffff;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f172a;
+            border-top: 1px solid var(--border-line);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 100;
+        }
+
+        .nav-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 25%;
+        }
+
+        .nav-tab.active {
+            color: var(--primary-cyan);
+        }
+
+        .nav-tab svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="icon-192.png" alt="Anali Technergies" style="height: 38px; width: 38px; border-radius: 8px;">
+            <div>
+                <div style="font-size: 15px; font-weight: 800; color: #38b6ff; letter-spacing: 0.5px;">ANALI</div>
+                <div style="font-size: 10px; font-weight: 600; color: #f8fafc; letter-spacing: 1px; margin-top: -2px;">TECHNERGIES</div>
+            </div>
+        </div>
+        <div class="uav-badge">
+            <span class="uav-dot"></span> DGCA UIN Active
+        </div>
+    </header>
+
+    <!-- TAB 1: DASHBOARD -->
+    <section id="tab-dash" class="content-section active">
+        <div class="weather-banner">
+            <div>
+                <div class="weather-stat-lbl">Solar Irradiance</div>
+                <div class="weather-stat-val">> 650 W/m² (IEC)</div>
+            </div>
+            <div>
+                <div class="weather-stat-lbl">Thermal Sensor</div>
+                <div class="weather-stat-val" style="color: var(--primary-cyan);">640×512 (9mm)</div>
+            </div>
+            <div>
+                <div class="weather-stat-lbl">Fleet Status</div>
+                <div class="weather-stat-val" style="color: var(--accent-green);">Ready</div>
+            </div>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-lbl">Total Pipeline Value</div>
+                <div class="kpi-val">₹6,75,000</div>
+                <div class="kpi-sub">5 Active Projects</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-lbl">Audited Capacity</div>
+                <div class="kpi-val">117.5 MW</div>
+                <div class="kpi-sub">Solar & Substations</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-lbl">Active B2B Leads</div>
+                <div class="kpi-val" style="color: var(--accent-green);">5 Leads</div>
+                <div class="kpi-sub">Solar O&M / EPC</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-lbl">1 MW Free Pilots</div>
+                <div class="kpi-val" style="color: var(--sun-gold);">2 Demos</div>
+                <div class="kpi-sub">Trial Pitches</div>
+            </div>
+        </div>
+
+        <div class="progress-card">
+            <div>
+                <div style="font-size: 15px; font-weight: 700;">Today's Execution</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="dashTasksNote">6 of 8 Tasks Completed</div>
+                <div style="font-size: 12px; color: var(--primary-cyan); font-weight: 600; margin-top: 6px; cursor: pointer;" onclick="switchTab('tab-check')">Open Checklist &rarr;</div>
+            </div>
+            <div class="progress-num" id="dashProgressText">75%</div>
+        </div>
+
+        <div class="quick-grid">
+            <button class="btn-action" onclick="switchTab('tab-proj')">
+                <span style="font-size: 20px;">📁</span>
+                <span>Projects</span>
+            </button>
+            <button class="btn-action" onclick="switchTab('tab-leads')">
+                <span style="font-size: 20px;">🎯</span>
+                <span>B2B Leads</span>
+            </button>
+            <button class="btn-action" onclick="switchTab('tab-check')">
+                <span style="font-size: 20px;">✅</span>
+                <span>Checklist</span>
+            </button>
+        </div>
+
+        <div style="margin-top: 16px;">
+            <div style="font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text-muted); text-transform: uppercase;">Active Milestones</div>
+            <div class="item-card">
+                <div class="item-header">
+                    <span class="item-title">GreenGrid Power EPC</span>
+                    <span class="item-badge badge-cyan">In Analysis</span>
+                </div>
+                <div class="item-desc">50 MW Solar PV + Substation | Tirunelveli, TN<br>QGIS ΔT anomaly categorization in progress.</div>
+            </div>
+            <div class="item-card">
+                <div class="item-header">
+                    <span class="item-title">Solray Energy Solutions</span>
+                    <span class="item-badge badge-green">Delivered</span>
+                </div>
+                <div class="item-desc">25 MW Solar Thermography | Parbhani, MH<br>Payment Received: ₹1,25,000 (100%).</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 2: CHECKLIST -->
+    <section id="tab-check" class="content-section">
+        <div style="font-size: 16px; font-weight: 800; margin-bottom: 4px;">Daily Execution Checklist</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">டிக் செய்து இன்றைய வேலைகளைக் கண்காணிக்கவும்:</div>
+
+        <div id="checklist-tasks">
+            <div class="task-row task-done" onclick="toggleRow(this)">
+                <input type="checkbox" class="task-chk" checked onclick="event.stopPropagation(); toggleRow(this.closest('.task-row'))">
+                <div>
+                    <div class="task-text" style="font-size: 13px; font-weight: 600;">Emails, Inquiries & Priority Goals</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">09:00 - 10:15 AM | Admin</div>
+                </div>
+            </div>
+            <div class="task-row task-done" onclick="toggleRow(this)">
+                <input type="checkbox" class="task-chk" checked onclick="event.stopPropagation(); toggleRow(this.closest('.task-row'))">
+                <div>
+                    <div class="task-text" style="font-size: 13px; font-weight: 600;">Pix4D / WebODM Orthomosaic Stitching</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">10:15 - 11:45 AM | Processing</div>
+                </div>
+            </div>
+            <div class="task-row task-done" onclick="toggleRow(this)">
+                <input type="checkbox" class="task-chk" checked onclick="event.stopPropagation(); toggleRow(this.closest('.task-row'))">
+                <div>
+                    <div class="task-text" style="font-size: 13px; font-weight: 600;">QGIS ΔT Thermal Anomaly Classification</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">11:45 - 01:15 PM | Analytics</div>
+                </div>
+            </div>
+            <div class="task-row" onclick="toggleRow(this)">
+                <input type="checkbox" class="task-chk" onclick="event.stopPropagation(); toggleRow(this.closest('.task-row'))">
+                <div>
+                    <div class="task-text" style="font-size: 13px; font-weight: 600;">LinkedIn Outreach: 10 Solar O&M Heads</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">02:15 - 03:00 PM | Lead Generation</div>
+                </div>
+            </div>
+            <div class="task-row task-done" onclick="toggleRow(this)">
+                <input type="checkbox" class="task-chk" checked onclick="event.stopPropagation(); toggleRow(this.closest('.task-row'))">
+                <div>
+                    <div class="task-text" style="font-size: 13px; font-weight: 600;">Send 5 Free 1 MW Pilot Proposals (PDF)</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">03:00 - 03:45 PM | Sales Outreach</div>
+                </div>
+            </div>
+            <div class="task-row" onclick="toggleRow(this)">
+                <input type="checkbox" class="task-chk" onclick="event.stopPropagation(); toggleRow(this.closest('.task-row'))">
+                <div>
+                    <div class="task-text" style="font-size: 13px; font-weight: 600;">Publish RGB vs Thermal Case Study on LinkedIn</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">04:00 - 04:45 PM | Marketing</div>
+                </div>
+            </div>
+            <div class="task-row task-done" onclick="toggleRow(this)">
+                <input type="checkbox" class="task-chk" checked onclick="event.stopPropagation(); toggleRow(this.closest('.task-row'))">
+                <div>
+                    <div class="task-text" style="font-size: 13px; font-weight: 600;">Follow Up on Quotations & Update CRM</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">05:15 - 06:00 PM | Sales Follow-up</div>
+                </div>
+            </div>
+            <div class="task-row task-done" onclick="toggleRow(this)">
+                <input type="checkbox" class="task-chk" checked onclick="event.stopPropagation(); toggleRow(this.closest('.task-row'))">
+                <div>
+                    <div class="task-text" style="font-size: 13px; font-weight: 600;">Put Batteries in Storage Mode (50-60%)</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">06:00 - 06:30 PM | Battery Health</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 3: PROJECTS -->
+    <section id="tab-proj" class="content-section">
+        <div style="font-size: 16px; font-weight: 800; margin-bottom: 4px;">Solar & Substation Projects</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">நடப்பு திட்டங்களின் நிலை மற்றும் கட்டணங்கள்:</div>
+
+        <div class="item-card">
+            <div class="item-header">
+                <span class="item-title">Solray Energy Solutions</span>
+                <span class="item-badge badge-green">Delivered</span>
+            </div>
+            <div class="item-desc">
+                <strong>Capacity:</strong> 25 MW | Parbhani, MH<br>
+                <strong>Audit:</strong> Radiometric Aerial Thermography<br>
+                <strong>Value:</strong> ₹1,25,000 | <strong>Payment:</strong> Received (100%)
+            </div>
+        </div>
+
+        <div class="item-card">
+            <div class="item-header">
+                <span class="item-title">GreenGrid Power EPC</span>
+                <span class="item-badge badge-cyan">In Progress</span>
+            </div>
+            <div class="item-desc">
+                <strong>Capacity:</strong> 50 MW + 132kV PSS | Tirunelveli, TN<br>
+                <strong>Audit:</strong> Hotspots & Bypass Diode Scan<br>
+                <strong>Value:</strong> ₹2,40,000 | <strong>Payment:</strong> Advance Paid (50%)
+            </div>
+        </div>
+
+        <div class="item-card">
+            <div class="item-header">
+                <span class="item-title">Apex Infra Renewables</span>
+                <span class="item-badge badge-gold">Scheduled</span>
+            </div>
+            <div class="item-desc">
+                <strong>Capacity:</strong> 40 MW | Pavagada, KA<br>
+                <strong>Audit:</strong> IEC 62446-3 Thermography<br>
+                <strong>Value:</strong> ₹1,90,000 | <strong>Payment:</strong> Pending
+            </div>
+        </div>
+
+        <div class="item-card">
+            <div class="item-header">
+                <span class="item-title">Vidyut Transmission Ltd</span>
+                <span class="item-badge badge-gold">Quote Sent</span>
+            </div>
+            <div class="item-desc">
+                <strong>Capacity:</strong> 132kV PSS | Aranthangi, TN<br>
+                <strong>Audit:</strong> Switchyard & Isolator Thermal Scan<br>
+                <strong>Value:</strong> ₹85,000 | <strong>Status:</strong> Awaiting PO
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 4: LEADS & CRM -->
+    <section id="tab-leads" class="content-section">
+        <div style="font-size: 16px; font-weight: 800; margin-bottom: 4px;">B2B Lead Pipeline & Outreach</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">நேரடி வாட்ஸ்அப் அல்லது அழைப்பு மூலம் பேசலாம்:</div>
+
+        <div class="item-card">
+            <div class="item-header">
+                <span class="item-title">SunRay Power O&M Ltd</span>
+                <span class="item-badge badge-green">Pilot Scheduled</span>
+            </div>
+            <div class="item-desc" style="margin-bottom: 12px;">
+                <strong>Contact:</strong> K. Rajesh Kumar (Head of O&M)<br>
+                <strong>Plant:</strong> 20 MW Solar Farm | Tirunelveli, TN<br>
+                <strong>Next Step:</strong> Field Demo on Nov 05
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <a href="https://wa.me/?text=வணக்கம்%20Rajesh%20sir,%20Anali%20Technergies-ல்%20இருந்து%20சுபா%20சிவக்குமரன்.%20உங்கள்%2020MW%20சோலார்%20தளத்தில்%201MW%20இலவச%20மாதிரி%20தெர்மல்%20ஆய்வு%20(Pilot%20Audit)%20செய்வது%20குறித்து..." class="btn-wa">💬 WhatsApp Pitch</a>
+                <a href="tel:8124148986" class="btn-call">📞 Call Client</a>
+            </div>
+        </div>
+
+        <div class="item-card">
+            <div class="item-header">
+                <span class="item-title">Evergreen Solar EPC</span>
+                <span class="item-badge badge-cyan">Quote Sent</span>
+            </div>
+            <div class="item-desc" style="margin-bottom: 12px;">
+                <strong>Contact:</strong> Suresh Venkat (VP Projects)<br>
+                <strong>Plant:</strong> 15 MW Solar PV | Coimbatore, TN<br>
+                <strong>Next Step:</strong> Pricing discussion call
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <a href="https://wa.me/?text=வணக்கம்%20Suresh%20sir,%20Anali%20Technergies%20சோலார்%20தெர்மல்%20ஆடிட்%20கோட்டேஷன்%20தங்களுக்கு%20கிடைத்ததா%20என%20அறியலாமா?" class="btn-wa">💬 Follow-up</a>
+                <a href="tel:8124148986" class="btn-call">📞 Call Client</a>
+            </div>
+        </div>
+
+        <div class="item-card">
+            <div class="item-header">
+                <span class="item-title">Apex Textile Industries</span>
+                <span class="item-badge badge-gold">Proposal Sent</span>
+            </div>
+            <div class="item-desc" style="margin-bottom: 12px;">
+                <strong>Contact:</strong> M. Shanmugam (Chief Electrical Engr)<br>
+                <strong>Plant:</strong> 2 MW C&I Rooftop | SIPCOT Perundurai<br>
+                <strong>Issue:</strong> Inverter tripping & hotspot investigation
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <a href="https://wa.me/?text=வணக்கம்%20Shanmugam%20sir,%20ரூஃப்டாப்%20சோலார்%20தெர்மல்%20ஸ்கேன்%20மாதிரி%20அறிக்கையை%20பார்வைக்கு%20அனுப்பியுள்ளோம்." class="btn-wa">💬 WhatsApp Pitch</a>
+                <a href="tel:8124148986" class="btn-call">📞 Call Client</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-tab active" onclick="switchTab('tab-dash')">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>Dashboard</span>
+        </button>
+        <button class="nav-tab" onclick="switchTab('tab-check')">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <span>Checklist</span>
+        </button>
+        <button class="nav-tab" onclick="switchTab('tab-proj')">
+            <svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+            <span>Projects</span>
+        </button>
+        <button class="nav-tab" onclick="switchTab('tab-leads')">
+            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            <span>Leads CRM</span>
+        </button>
+    </nav>
+
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then((reg) => {
+                    console.log('ServiceWorker registered:', reg.scope);
+                }).catch((err) => {
+                    console.log('ServiceWorker registration failed:', err);
+                });
+            });
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+
+            const tabMap = {
+                'tab-dash': 0,
+                'tab-check': 1,
+                'tab-proj': 2,
+                'tab-leads': 3
+            };
+            document.querySelectorAll('.nav-tab')[tabMap[tabId]].classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function toggleRow(row) {
+            const chk = row.querySelector('.task-chk');
+            chk.checked = !chk.checked;
+            if (chk.checked) {
+                row.classList.add('task-done');
+            } else {
+                row.classList.remove('task-done');
+            }
+            updateChecklistStats();
+        }
+
+        function updateChecklistStats() {
+            const chks = document.querySelectorAll('.task-chk');
+            const total = chks.length;
+            const done = document.querySelectorAll('.task-chk:checked').length;
+            const pct = Math.round((done / total) * 100);
+
+            document.getElementById('dashProgressText').innerText = pct + '%';
+            document.getElementById('dashTasksNote').innerText = `${done} of ${total} Tasks Completed`;
+        }
+    </script>
+</body>
+</html>
